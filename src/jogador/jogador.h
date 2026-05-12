@@ -3,7 +3,8 @@
 
 #include <string>
 
-#include "inventario.h"
+#include "../inventario/inventario.h"
+#include "../item/item.h"
 
 class Jogador {
     private:
@@ -13,8 +14,11 @@ class Jogador {
         int pontuacao;
         Inventario inventario;
     public:
+        Jogador(int id, std::string nome, std::string classe);
         void adicionarPontuacao(int valor);
         void removerPontuacao(int valor);
+        void inserirItem(Item item);
+        void removerItem(Item item);
         void exibirPerfil();
         std::string getNome();
         int getId();

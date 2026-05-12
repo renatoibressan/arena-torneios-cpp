@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "jogador.h"
-#include "fila_partidas.h"
-#include "historico_acoes.h"
+#include "../jogador/jogador.h"
+#include "../fila/fila_partidas.h"
+#include "../historico/historico_acoes.h"
 
 class Sistema {
     private:
@@ -13,11 +13,9 @@ class Sistema {
         FilaPartidas fila;
         HistoricoAcoes historico;
     public:
-        void executar();
-        void menu();
+        void menuPrincipal();
         void cadastrarJogador();
         void iniciarPartida();
 };
-
 
 #endif

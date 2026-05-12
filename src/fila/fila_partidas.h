@@ -3,7 +3,7 @@
 
 #include <queue>
 
-#include "jogador.h"
+#include "../jogador/jogador.h"
 
 class FilaPartidas {
     private:
