@@ -1,5 +1,5 @@
-#include <string>
 #include <vector>
+#include <string>
 #include <cstdlib>
 
 #include "algoritmos.h"
@@ -15,11 +15,6 @@ void ordenarRanking(std::vector<Jogador> jogadores) {
 
 Jogador* buscarJogadorPorNome(std::vector<Jogador> jogadores, std::string nome) {
     for (Jogador jogador : jogadores) if (jogador.getNome().compare(nome) == 0) return &jogador;
-    return nullptr;
-}
-
-Jogador* buscarJogadorPorId(std::vector<Jogador> jogadores, int id) {
-    for (Jogador jogador  : jogadores) if (jogador.getId() == id) return &jogador;
     return nullptr;
 }
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 #include "jogador.h"
@@ -24,7 +25,21 @@ void Jogador::removerItem(Item item) {
     inventario.removerItem(item.getNome());
 }
 
+void Jogador::buscarItem(std::string nome) {
+    Item *item = inventario.buscarItem(nome);
+    item->exibirItem();
+}
+
+void Jogador::listarItens() {
+    inventario.listarItens();
+}
+
 void Jogador::exibirPerfil() {
+    std::cout << "------------------------------" << std::endl;
+    std::cout << "Jogador #" << id << ": " << nome << std::endl;
+    std::cout << "Classe: " << classe << std::endl;
+    std::cout << "Pontuacao atual: " << pontuacao << std::endl;
+    std::cout << "------------------------------" << std::endl;
 }
 
 std::string Jogador::getNome() {

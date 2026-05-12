@@ -15,7 +15,18 @@ class Sistema {
     public:
         void menuPrincipal();
         void cadastrarJogador();
+        void listarJogadores();
+        void buscarJogador();
+        void inserirEmInventario();
+        void listarInventario();
+        void buscarDeInventario();
+        void removerDeInventario();
+        void adicionarFila();
+        void mostrarFila();
         void iniciarPartida();
+        void registrarHistorico();
+        void desfazerHistorico();
+        void mostrarHistorico();
 };
 
 #endif

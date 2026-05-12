@@ -19,6 +19,8 @@ class Jogador {
         void removerPontuacao(int valor);
         void inserirItem(Item item);
         void removerItem(Item item);
+        void buscarItem(std::string nome);
+        void listarItens();
         void exibirPerfil();
         std::string getNome();
         int getId();
