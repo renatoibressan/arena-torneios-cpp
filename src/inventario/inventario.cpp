@@ -12,19 +12,32 @@ int Inventario::funcaoHash(std::string chave) {
     return hash % tamanhoTabela;
 }
 
-void Inventario::inserirItem(Item item) {
+void Inventario::inserirItem(const Item& item) {
+    int idx = funcaoHash(item.getNome());
+    tabela.at(idx).push_back(item);
 }
 
-void Inventario::removerItem(std::string nome) {
+bool Inventario::removerItem(const std::string& nome) {
+    int idx = funcaoHash(nome);
+    auto& bucket = tabela.at(idx);
+    for (auto i = bucket.begin(); i != bucket.end(); ++i) {
+        if (i->getNome() == nome) {
+            bucket.erase(i);
+            return true;
+        }
+    }
+    return false;
 }
 
-Item* Inventario::buscarItem(std::string nome) {
+Item* Inventario::buscarItem(const std::string& nome) {
+    int idx = funcaoHash(nome);
+    for (Item& item : tabela.at(idx)) if (item.getNome() == nome) return &item;
+    return nullptr;
 }
 
-void Inventario::listarItens() {
-    if (tabela.empty()) return;
-    for (int i = 0; i < tamanhoTabela; i++) {
-        std::list<Item> itens = tabela.at(i);
-        for (Item item : itens) item.exibirItem();
+void Inventario::listarItens() const {
+    for (size_t i = 0; i < tabela.size(); i++) {
+        const auto& itens = tabela.at(i);
+        for (const Item& item : itens) item.exibirItem();
     }
 }

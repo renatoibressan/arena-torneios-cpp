@@ -12,7 +12,11 @@ class Sistema {
         std::vector<Jogador> jogadores;
         FilaPartidas fila;
         HistoricoAcoes historico;
+        int ultimoId;
+        bool ordenado;
+        int gerarNovoId();
     public:
+        Sistema();
         void menuPrincipal();
         void cadastrarJogador();
         void listarJogadores();

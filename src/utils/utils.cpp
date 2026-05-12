@@ -34,6 +34,10 @@ std::string lerString(std::string mensagem) {
     std::cout << mensagem;
     std::string valor;
     std::getline(std::cin, valor);
+    while (valor.empty()) {
+        std::cout << "Leitura invalida!" << std::endl << mensagem;
+        std::getline(std::cin, valor);
+    }
     return valor;
 }
 

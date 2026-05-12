@@ -3,16 +3,19 @@
 
 #include <string>
 
+#include "../tipo/tipo.h"
+
 class Item {
     private:
         std::string nome;
-        std::string tipo;
+        Tipo tipo;
         int raridade;
         int poder;
     public:
-        Item(std::string nome, std::string tipo, int raridade, int poder);
-        void exibirItem();
-        std::string getNome();
+        Item(std::string nome, Tipo tipo, int raridade, int poder);
+        void exibirItem() const;
+        std::string getNome() const;
+        int getPoder() const;
 };
 
 #endif

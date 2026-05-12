@@ -14,10 +14,10 @@ class Inventario {
     public:
         Inventario(int tamanhoTabela);
         int funcaoHash(std::string chave);
-        void inserirItem(Item item);
-        void removerItem(std::string nome);
-        Item* buscarItem(std::string nome);
-        void listarItens();
+        void inserirItem(const Item& item);
+        bool removerItem(const std::string& nome);
+        Item* buscarItem(const std::string& nome);
+        void listarItens() const;
 };
 
 #endif

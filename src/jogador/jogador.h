@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "../categoria/categoria.h"
 #include "../inventario/inventario.h"
 #include "../item/item.h"
 
@@ -10,21 +11,23 @@ class Jogador {
     private:
         int id;
         std::string nome;
-        std::string classe;
+        Categoria categoria;
+        int vida;
         int pontuacao;
         Inventario inventario;
     public:
-        Jogador(int id, std::string nome, std::string classe);
+        Jogador(int id, const std::string& nome, Categoria categoria, int vida);
         void adicionarPontuacao(int valor);
         void removerPontuacao(int valor);
-        void inserirItem(Item item);
-        void removerItem(Item item);
-        void buscarItem(std::string nome);
-        void listarItens();
-        void exibirPerfil();
-        std::string getNome();
-        int getId();
-        int getPontuacao();
+        void inserirItem(const Item& item);
+        bool removerItem(const std::string& nome);
+        Item* buscarItem(const std::string& nome);
+        void listarItens() const;
+        void exibirPerfil() const;
+        const std::string& getNome() const;
+        int getId() const;
+        int getVida() const;
+        int getPontuacao() const;
 };
 
 #endif

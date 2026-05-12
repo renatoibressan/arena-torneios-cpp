@@ -6,12 +6,12 @@
 
 #include "../jogador/jogador.h"
 
-bool compararPontuacao(Jogador a, Jogador b);
-void ordenarRanking(std::vector<Jogador> jogadores);
-Jogador* buscarJogadorPorNome(std::vector<Jogador> jogadores, std::string nome);
+Jogador* buscarJogadorPorNome(std::vector<Jogador>& jogadores, const std::string nome);
+bool compararPontuacao(const Jogador& a, const Jogador& b);
 void troca(Jogador &a, Jogador &b);
-int particaoLomuto(std::vector<Jogador> jogadores, int inicio, int fim);
-int particaoRandom(std::vector<Jogador> jogadores, int inicio, int fim);
-void quickSort(std::vector<Jogador> jogadores, int inicio, int fim);
+int particaoLomuto(std::vector<Jogador>& jogadores, int inicio, int fim);
+int particaoRandom(std::vector<Jogador>& jogadores, int inicio, int fim);
+void quickSort(std::vector<Jogador>& jogadores, int inicio, int fim);
+void ordenarRanking(std::vector<Jogador>& jogadores);
 
 #endif

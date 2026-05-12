@@ -2,11 +2,11 @@
 #include <string>
 
 #include "jogador.h"
+#include "../categoria/categoria.h"
 #include "../inventario/inventario.h"
 #include "../item/item.h"
 
-Jogador::Jogador(int id, std::string nome, std::string classe) : id(id), nome(nome), classe(classe), pontuacao(0), inventario(20) {
-}
+Jogador::Jogador(int id, const std::string& nome, Categoria categoria, int vida) : id(id), nome(nome), categoria(categoria), vida(vida), pontuacao(0), inventario(4) {}
 
 void Jogador::adicionarPontuacao(int valor) {
     pontuacao += valor;
@@ -17,39 +17,43 @@ void Jogador::removerPontuacao(int valor) {
     if (pontuacao < 0) pontuacao = 0;
 }
 
-void Jogador::inserirItem(Item item) {
+void Jogador::inserirItem(const Item& item) {
     inventario.inserirItem(item);
 }
 
-void Jogador::removerItem(Item item) {
-    inventario.removerItem(item.getNome());
+bool Jogador::removerItem(const std::string& nome) {
+    return inventario.removerItem(nome);
 }
 
-void Jogador::buscarItem(std::string nome) {
-    Item *item = inventario.buscarItem(nome);
-    item->exibirItem();
+Item* Jogador::buscarItem(const std::string& nome) {
+    return inventario.buscarItem(nome);
 }
 
-void Jogador::listarItens() {
+void Jogador::listarItens() const {
     inventario.listarItens();
 }
 
-void Jogador::exibirPerfil() {
+void Jogador::exibirPerfil() const {
     std::cout << "------------------------------" << std::endl;
     std::cout << "Jogador #" << id << ": " << nome << std::endl;
-    std::cout << "Classe: " << classe << std::endl;
+    std::cout << "Categoria: " << categoriaToString(categoria) << std::endl;
     std::cout << "Pontuacao atual: " << pontuacao << std::endl;
+    std::cout << "Vida total: " << vida << std::endl;
     std::cout << "------------------------------" << std::endl;
 }
 
-std::string Jogador::getNome() {
+const std::string& Jogador::getNome() const {
     return nome;
 }
 
-int Jogador::getId() {
+int Jogador::getId() const {
     return id;
 }
 
-int Jogador::getPontuacao() {
+int Jogador::getVida() const {
+    return vida;
+}
+
+int Jogador::getPontuacao() const {
     return pontuacao;
 }
