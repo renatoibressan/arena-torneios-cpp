@@ -3,7 +3,10 @@
 
 #include "sistema.h"
 #include "../utils/utils.h"
+#include "../jogador/jogador.h"
 #include "../categoria/categoria.h"
+#include "../item/item.h"
+#include "../tipo/tipo.h"
 #include "../algoritmos/algoritmos.h"
 #include "../partidas/sistema_partidas.h"
 
