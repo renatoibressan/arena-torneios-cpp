@@ -1,27 +1,12 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
 #include <string>
 
-#include <sistema_partidas.h>
+#include "sistema_partidas.h"
 #include "../jogador/jogador.h"
-#include "../fila/fila_partidas.h"
-#include "../algoritmos/algoritmos.h"
 #include "../utils/utils.h"
 
-ResultadoPartida executarPartida(std::vector<Jogador>& jogadores, FilaPartidas& fila) {
-    if (fila.filaVazia()) {
-        std::cout << "Fila de jogadores vazia!" << std::endl;
-        return {false, -1, -1, 0};
-    }
-    int id1 = fila.desenfileirar();
-    if (fila.filaVazia()) {
-        std::cout << "Fila de jogadores vazia!" << std::endl;
-        return {false, -1, -1, 0};
-    }
-    int id2 = fila.desenfileirar();
-    Jogador *j1 = buscarJogadorPorId(jogadores, id1);
-    Jogador *j2 = buscarJogadorPorId(jogadores, id2);
+ResultadoPartida executarPartida(Jogador *j1, Jogador *j2) {
     Jogador *primeiro = (std::rand() % 2 == 0) ? j1 : j2;
     Jogador *segundo = (primeiro == j1) ? j2 : j1;
     int vidaJ1 = primeiro->getVida();
@@ -62,7 +47,7 @@ ResultadoPartida executarPartida(std::vector<Jogador>& jogadores, FilaPartidas& 
             std::cout << std::endl << segundo->getNome() << " foi nocauteado em  " << turnos << " turnos!" << std::endl;
             std::cout << primeiro->getNome() << " foi o vencedor da partida!" << std::endl;
             std::cout << "---------------------------------------------" << std::endl;
-            return {true, primeiro->getId(), segundo->getId(), turnos};
+            return {primeiro->getId(), segundo->getId(), turnos};
         }
         int danoJ2 = itemJ2->getPoder() / 10;
         std::cout << std::endl << primeiro->getNome() << " recebeu " << danoJ2 << " pontos de dano!" << std::endl;
@@ -71,7 +56,7 @@ ResultadoPartida executarPartida(std::vector<Jogador>& jogadores, FilaPartidas& 
             std::cout << std::endl << primeiro->getNome() << " foi nocauteado em " << turnos << " turnos!" << std::endl;
             std::cout << segundo->getNome() << " foi o vencedor da partida!" << std::endl;
             std::cout << "---------------------------------------------" << std::endl;
-            return {true, segundo->getId(), primeiro->getId(), turnos};
+            return {segundo->getId(), primeiro->getId(), turnos};
         }
     }
 }

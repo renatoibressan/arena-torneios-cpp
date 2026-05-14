@@ -25,9 +25,8 @@ void Sistema::menuPrincipal() {
     std::cout << "8. Adicionar jogador a fila" << std::endl;
     std::cout << "9. Mostrar fila atual" << std::endl;
     std::cout << "10. Iniciar partida" << std::endl;
-    std::cout << "11. Registrar no historico" << std::endl;
-    std::cout << "12. Desfazer do historico" << std::endl;
-    std::cout << "13. Mostrar historico" << std::endl;
+    std::cout << "11. Desfazer do historico" << std::endl;
+    std::cout << "12. Mostrar historico completo" << std::endl;
     std::cout << "0. Encerrar o programa" << std::endl << std::endl;
 }
 
@@ -44,11 +43,12 @@ void Sistema::cadastrarJogador() {
     }
     try {
         Categoria categoria = categoriaFromString(nomeCategoria);
+        jogadores.emplace_back(id, nome, categoria, vida);
         ultimoId = id;
         ordenado = false;
-        jogadores.emplace_back(id, nome, categoria, vida);
         std::cout << "Jogador cadastrado com sucesso!" << std::endl;
         jogadores.back().exibirPerfil();
+        historico.registrarAcao("Jogador " + nome + " cadastrado.");
     } catch (const char *e) {
         std::cerr << "Nao foi possivel cadastrar o jogador: " << e << std::endl;
     }
@@ -117,6 +117,7 @@ void Sistema::inserirEmInventario() {
         jogador->inserirItem(item);
         std::cout << "Item inserido no inventario de " << jogador->getNome() << " com sucesso!" << std::endl;
         item.exibirItem();
+        historico.registrarAcao("Item " + nomeItem + " inserido no inventario de " + jogador->getNome() + ".");
     } catch (const char *e) {
         std::cerr << "Nao foi possivel inserir o item no inventario do jogador " << jogador->getNome() << ": " << e << std::endl;
     }
@@ -177,6 +178,7 @@ void Sistema::removerDeInventario() {
     capitalizarString(nomeItem);
     bool removido = jogador->removerItem(nomeItem);
     (!removido) ? std::cout << "Item " << nomeItem << " nao encontrado!" << std::endl : std::cout << "Item " << nomeItem << " removido com sucesso!" << std::endl;
+    if (removido) historico.registrarAcao("Item " + nomeItem + " removido do inventario de " + jogador->getNome() + ".");
 }
 
 void Sistema::adicionarFila() {
@@ -194,6 +196,7 @@ void Sistema::adicionarFila() {
     int id = jogador->getId();
     fila.enfileirar(id);
     std::cout << "Jogador " << jogador->getNome() << " adicionado a fila com sucesso!" << std::endl;
+    historico.registrarAcao(jogador->getNome() + " adicionado a fila de espera para partidas.");
 }
 
 void Sistema::mostrarFila() {
@@ -205,32 +208,47 @@ void Sistema::mostrarFila() {
 }
 
 void Sistema::iniciarPartida() {
-    if (fila.filaVazia() || fila.tamanhoFila() < 2) {
+    if (fila.filaVazia()) {
         std::cout << "Fila de jogadores vazia/insuficiente!" << std::endl;
         return;
     }
-    ResultadoPartida resultado = executarPartida(jogadores, fila);
-    if (resultado.sucesso) {
-        const int recompensa = resultado.turnos * 10;
-        const int desconto = recompensa / 2;
-        Jogador *vencedor = buscarJogadorPorId(jogadores, resultado.idVencedor);
-        Jogador *perdedor = buscarJogadorPorId(jogadores, resultado.idPerdedor);
-        if (!vencedor || !perdedor) {
-            std::cout << "Jogadores nao encontrados!" << std::endl;
-            return;
-        }
-        vencedor->adicionarPontuacao(recompensa);
-        perdedor->removerPontuacao(desconto);
-        std::cout << vencedor->getNome() << ": +" << recompensa << "p." << std::endl;
-        std::cout << perdedor->getNome() << ": -" << desconto << "p." << std::endl;
+    int id1 = fila.desenfileirar();
+    if (fila.filaVazia()) {
+        std::cout << "Fila de jogadores vazia!" << std::endl;
+        return;
     }
-}
-
-void Sistema::registrarHistorico() {
+    int id2 = fila.desenfileirar();
+    Jogador *j1 = buscarJogadorPorId(jogadores, id1);
+    Jogador *j2 = buscarJogadorPorId(jogadores, id2);
+    ResultadoPartida resultado = executarPartida(j1, j2);
+    const int recompensa = resultado.turnos * 10;
+    const int desconto = recompensa / 2;
+    Jogador *vencedor = buscarJogadorPorId(jogadores, resultado.idVencedor);
+    Jogador *perdedor = buscarJogadorPorId(jogadores, resultado.idPerdedor);
+    if (!vencedor || !perdedor) {
+        std::cout << "Jogadores nao encontrados!" << std::endl;
+        return;
+    }
+    vencedor->adicionarPontuacao(recompensa);
+    perdedor->removerPontuacao(desconto);
+    std::cout << vencedor->getNome() << ": +" << recompensa << "pts." << std::endl;
+    std::cout << perdedor->getNome() << ": -" << desconto << "pts." << std::endl;
+    historico.registrarAcao(vencedor->getNome() + " venceu partida contra " + perdedor->getNome() + ".");
 }
 
 void Sistema::desfazerHistorico() {
+    if (historico.historicoVazio()) {
+        std::cout << "Historico de acoes vazia!" << std::endl;
+        return;
+    }
+    std::string acao = historico.desfazerUltimaAcao();
+    if (!acao.empty()) std::cout << "Acao desfeita com sucesso! (" << acao << ")" << std::endl;
 }
 
 void Sistema::mostrarHistorico() {
+    if (historico.historicoVazio()) {
+        std::cout << "Historico de acoes vazia!" << std::endl;
+        return;
+    }
+    historico.mostrarHistorico("Historico completo:");
 }

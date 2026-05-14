@@ -69,16 +69,11 @@ int main() {
                 sistema.iniciarPartida();
                 break;
             case 11:
-                // Registrar no histórico
-                cout << endl;
-                sistema.registrarHistorico();
-                break;
-            case 12:
                 // Desfazer do histórico
                 cout << endl;
                 sistema.desfazerHistorico();
                 break;
-            case 13:
+            case 12:
                 // Mostrar histórico
                 cout << endl;
                 sistema.mostrarHistorico();

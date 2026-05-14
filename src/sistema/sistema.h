@@ -28,7 +28,6 @@ class Sistema {
         void adicionarFila();
         void mostrarFila();
         void iniciarPartida();
-        void registrarHistorico();
         void desfazerHistorico();
         void mostrarHistorico();
 };

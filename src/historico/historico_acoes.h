@@ -9,8 +9,9 @@ class HistoricoAcoes {
         std::stack<std::string> historico;
     public:
         void registrarAcao(std::string acao);
-        void desfazerUltimaAcao();
-        void mostrarHistorico();
+        std::string desfazerUltimaAcao();
+        void mostrarHistorico(const std::string& mensagem);
+        bool historicoVazio() const;
 };
 
 #endif
