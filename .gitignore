@@ -35,7 +35,7 @@
 *.lib
 
 # Executables
-main
+bin/*
 *.exe
 *.out
 *.app

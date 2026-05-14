@@ -13,6 +13,7 @@ std::string tipoToString(Tipo tipo) {
         case Tipo::Besta: return "Besta";
         case Tipo::Pistola: return "Pistola";
         case Tipo::Rifle: return "Rifle";
+        default: return "";
     }
 }
 

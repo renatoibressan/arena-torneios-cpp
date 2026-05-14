@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "sistema.h"
-#include "utils.h"
+#include "../sistema/sistema.h"
+#include "../utils/utils.h"
 
 using namespace std;
 

@@ -15,6 +15,7 @@ std::string categoriaToString(Categoria categoria) {
         case Categoria::Bardo: return "Bardo";
         case Categoria::Druida: return "Druida";
         case Categoria::Monge: return "Monge";
+        default: return "";
     }
 }
 
