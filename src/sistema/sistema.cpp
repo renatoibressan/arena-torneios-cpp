@@ -193,6 +193,10 @@ void Sistema::adicionarFila() {
         std::cout << "Jogador " << nomeBusca << " nao encontrado!" << std::endl;
         return;
     }
+    if (jogador->inventarioVazio()) {
+        std::cout << jogador->getNome() << " nao tem itens para realizar partidas!" << std::endl;
+        return;
+    }
     int id = jogador->getId();
     fila.enfileirar(id);
     std::cout << "Jogador " << jogador->getNome() << " adicionado a fila com sucesso!" << std::endl;
@@ -214,7 +218,7 @@ void Sistema::iniciarPartida() {
     }
     int id1 = fila.desenfileirar();
     if (fila.filaVazia()) {
-        std::cout << "Fila de jogadores vazia!" << std::endl;
+        std::cout << "Fila de jogadores vazia/insuficiente!" << std::endl;
         return;
     }
     int id2 = fila.desenfileirar();

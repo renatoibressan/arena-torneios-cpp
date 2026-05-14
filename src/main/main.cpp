@@ -54,7 +54,7 @@ int main() {
                 sistema.removerDeInventario();
                 break;
             case 8:
-                // Adicionar jogador a fila
+                // Adicionar jogador à fila
                 cout << endl;
                 sistema.adicionarFila();
                 break;
@@ -74,7 +74,7 @@ int main() {
                 sistema.desfazerHistorico();
                 break;
             case 12:
-                // Mostrar histórico
+                // Mostrar histórico completo
                 cout << endl;
                 sistema.mostrarHistorico();
                 break;
