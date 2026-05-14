@@ -24,6 +24,7 @@ class Jogador {
         Item* buscarItem(const std::string& nome);
         void listarItens() const;
         void listarItensBatalha() const;
+        bool inventarioVazio() const;
         void exibirPerfil() const;
         const std::string& getNome() const;
         int getId() const;

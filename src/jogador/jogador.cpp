@@ -7,7 +7,7 @@
 #include "../inventario/inventario.h"
 #include "../item/item.h"
 
-Jogador::Jogador(int id, const std::string& nome, Categoria categoria, int vida) : id(id), nome(nome), categoria(categoria), vida(vida), pontuacao(0), inventario(4) {}
+Jogador::Jogador(int id, const std::string& nome, Categoria categoria, int vida) : id(id), nome(nome), categoria(categoria), vida(vida), pontuacao(0), inventario(10) {}
 
 void Jogador::adicionarPontuacao(int valor) {
     pontuacao += valor;
@@ -35,6 +35,10 @@ void Jogador::listarItens() const {
 
 void Jogador::listarItensBatalha() const {
     inventario.listarItensBatalha();
+}
+
+bool Jogador::inventarioVazio() const {
+    return inventario.inventarioVazio();
 }
 
 void Jogador::exibirPerfil() const {

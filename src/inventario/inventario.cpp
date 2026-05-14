@@ -5,7 +5,9 @@
 #include "inventario.h"
 #include "../item/item.h"
 
-Inventario::Inventario(int tamanhoTabela) : tamanhoTabela(tamanhoTabela) {}
+Inventario::Inventario(int tamanhoTabela) : tamanhoTabela(tamanhoTabela), quantidadeItens(0) {
+    tabela.resize(tamanhoTabela);
+}
 
 int Inventario::funcaoHash(std::string chave) {
     int hash = 0;
@@ -16,6 +18,7 @@ int Inventario::funcaoHash(std::string chave) {
 void Inventario::inserirItem(const Item& item) {
     int idx = funcaoHash(item.getNome());
     tabela.at(idx).push_back(item);
+    quantidadeItens++;
 }
 
 bool Inventario::removerItem(const std::string& nome) {
@@ -24,6 +27,7 @@ bool Inventario::removerItem(const std::string& nome) {
     for (auto i = bucket.begin(); i != bucket.end(); ++i) {
         if (i->getNome() == nome) {
             bucket.erase(i);
+            quantidadeItens--;
             return true;
         }
     }
@@ -52,4 +56,8 @@ void Inventario::listarItensBatalha() const {
         }
     }
     std::cout << "---------------------------------------------" << std::endl;
+}
+
+bool Inventario::inventarioVazio() const {
+    return quantidadeItens == 0;
 }

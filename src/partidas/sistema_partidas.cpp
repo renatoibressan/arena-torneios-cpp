@@ -17,8 +17,8 @@ ResultadoPartida executarPartida(Jogador *j1, Jogador *j2) {
     while (true) {
         turnos++;
         std::cout << "---------------------------------------------" << std::endl;
-        std::cout << std::endl << primeiro->getNome() << " (" << vidaJ1 << " / " << primeiro->getVida() << ")" << std::endl;
-        std::cout << segundo->getNome() << " (" << vidaJ2 << " / " << segundo->getVida() << ")" << std::endl << std::endl;
+        std::cout << primeiro->getNome() << " (" << vidaJ1 << " / " << primeiro->getVida() << ")" << std::endl;
+        std::cout << segundo->getNome() << " (" << vidaJ2 << " / " << segundo->getVida() << ")" << std::endl;
         std::cout << "---------------------------------------------" << std::endl;
         primeiro->listarItensBatalha();
         std::string nomeItem1 = lerString("Insira o nome do item do primeiro para busca: ");

@@ -11,6 +11,7 @@ class Inventario {
     private:
         std::vector<std::list<Item>> tabela;
         int tamanhoTabela;
+        int quantidadeItens;
     public:
         Inventario(int tamanhoTabela);
         int funcaoHash(std::string chave);
@@ -19,6 +20,7 @@ class Inventario {
         Item* buscarItem(const std::string& nome);
         void listarItens() const;
         void listarItensBatalha() const;
+        bool inventarioVazio() const;
 };
 
 #endif

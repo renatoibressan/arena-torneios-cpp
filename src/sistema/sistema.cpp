@@ -219,7 +219,15 @@ void Sistema::iniciarPartida() {
     }
     int id2 = fila.desenfileirar();
     Jogador *j1 = buscarJogadorPorId(jogadores, id1);
+    if (j1->inventarioVazio()) {
+        std::cout << j1->getNome() << " nao tem itens para realizar a partida!" << std::endl;
+        return;
+    }
     Jogador *j2 = buscarJogadorPorId(jogadores, id2);
+    if (j2->inventarioVazio()) {
+        std::cout << j2->getNome() << " nao tem itens para realizar a partida!" << std::endl;
+        return;
+    }
     ResultadoPartida resultado = executarPartida(j1, j2);
     const int recompensa = resultado.turnos * 10;
     const int desconto = recompensa / 2;
