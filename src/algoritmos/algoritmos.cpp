@@ -10,6 +10,11 @@ Jogador* buscarJogadorPorNome(std::vector<Jogador>& jogadores, const std::string
     return nullptr;
 }
 
+Jogador* buscarJogadorPorId(std::vector<Jogador>& jogadores, int id) {
+    for (Jogador& jogador: jogadores) if (jogador.getId() == id) return &jogador;
+    return nullptr;
+}
+
 bool compararPontuacao(const Jogador& a, const Jogador& b) {
     return a.getPontuacao() >= b.getPontuacao();
 }

@@ -18,7 +18,7 @@ void limparBuffer() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-int lerInt(std::string mensagem) {
+int lerInt(const std::string& mensagem) {
     std::cout << mensagem;
     int valor;
     while (!(std::cin >> valor)) {
@@ -30,7 +30,7 @@ int lerInt(std::string mensagem) {
     return valor;
 }
 
-std::string lerString(std::string mensagem) {
+std::string lerString(const std::string& mensagem) {
     std::cout << mensagem;
     std::string valor;
     std::getline(std::cin, valor);
@@ -41,7 +41,7 @@ std::string lerString(std::string mensagem) {
     return valor;
 }
 
-void capitalizarString(std::string &texto) {
+void capitalizarString(std::string& texto) {
     if (texto.empty()) return;
     texto[0] = std::toupper(static_cast<unsigned char>(texto[0]));
     for (size_t i = 1; i < texto.length(); i++) {

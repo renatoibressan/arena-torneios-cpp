@@ -7,6 +7,7 @@
 #include "../jogador/jogador.h"
 
 Jogador* buscarJogadorPorNome(std::vector<Jogador>& jogadores, const std::string nome);
+Jogador* buscarJogadorPorId(std::vector<Jogador>& jogadores, int id);
 bool compararPontuacao(const Jogador& a, const Jogador& b);
 void troca(Jogador &a, Jogador &b);
 int particaoLomuto(std::vector<Jogador>& jogadores, int inicio, int fim);

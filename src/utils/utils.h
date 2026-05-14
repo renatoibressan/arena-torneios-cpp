@@ -5,8 +5,8 @@
 
 void limparTela();
 void limparBuffer();
-int lerInt(std::string mensagem);
-std::string lerString(std::string mensagem);
-void capitalizarString(std::string &texto);
+int lerInt(const std::string& mensagem);
+std::string lerString(const std::string& mensagem);
+void capitalizarString(std::string& texto);
 
 #endif

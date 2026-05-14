@@ -23,6 +23,7 @@ class Jogador {
         bool removerItem(const std::string& nome);
         Item* buscarItem(const std::string& nome);
         void listarItens() const;
+        void listarItensBatalha() const;
         void exibirPerfil() const;
         const std::string& getNome() const;
         int getId() const;

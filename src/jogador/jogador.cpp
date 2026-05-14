@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 #include "jogador.h"
 #include "../categoria/categoria.h"
@@ -13,8 +14,7 @@ void Jogador::adicionarPontuacao(int valor) {
 }
 
 void Jogador::removerPontuacao(int valor) {
-    pontuacao -= valor;
-    if (pontuacao < 0) pontuacao = 0;
+    pontuacao = std::max(0, pontuacao - valor);
 }
 
 void Jogador::inserirItem(const Item& item) {
@@ -31,6 +31,10 @@ Item* Jogador::buscarItem(const std::string& nome) {
 
 void Jogador::listarItens() const {
     inventario.listarItens();
+}
+
+void Jogador::listarItensBatalha() const {
+    inventario.listarItensBatalha();
 }
 
 void Jogador::exibirPerfil() const {

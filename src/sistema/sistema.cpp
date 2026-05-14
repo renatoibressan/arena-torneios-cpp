@@ -5,6 +5,7 @@
 #include "../utils/utils.h"
 #include "../categoria/categoria.h"
 #include "../algoritmos/algoritmos.h"
+#include "../partidas/sistema_partidas.h"
 
 Sistema::Sistema() : ultimoId(0), ordenado(false) {}
 
@@ -54,6 +55,10 @@ void Sistema::cadastrarJogador() {
 }
 
 void Sistema::listarJogadores() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para exibir!" << std::endl;
+        return;
+    }
     if (!ordenado) {
         ordenarRanking(jogadores);
         ordenado = true;
@@ -64,6 +69,10 @@ void Sistema::listarJogadores() {
 }
 
 void Sistema::buscarJogador() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
     capitalizarString(nomeBusca);
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
@@ -77,6 +86,10 @@ void Sistema::buscarJogador() {
 }
 
 void Sistema::inserirEmInventario() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
     capitalizarString(nomeBusca);
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
@@ -94,7 +107,7 @@ void Sistema::inserirEmInventario() {
         grauRaridade = lerInt("Insira o grau de raridade do item: ");
     }
     int poderDano = lerInt("Insira o poder de dano do item: ");
-    while (poderDano < 0 || poderDano > 1000 || poderDano % 10 != 0) {
+    while (poderDano <= 0 || poderDano > 1000 || poderDano % 10 != 0) {
         std::cout << "Valor de poder de dano invalido!" << std::endl;
         poderDano = lerInt("Insira o poder de dano do item: ");
     }
@@ -110,6 +123,10 @@ void Sistema::inserirEmInventario() {
 }
 
 void Sistema::listarInventario() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
     capitalizarString(nomeBusca);
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
@@ -121,6 +138,10 @@ void Sistema::listarInventario() {
 }
 
 void Sistema::buscarDeInventario() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
     capitalizarString(nomeBusca);
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
@@ -141,6 +162,10 @@ void Sistema::buscarDeInventario() {
 }
 
 void Sistema::removerDeInventario() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
     capitalizarString(nomeBusca);
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
@@ -155,12 +180,50 @@ void Sistema::removerDeInventario() {
 }
 
 void Sistema::adicionarFila() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
+    std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
+    capitalizarString(nomeBusca);
+    Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
+    if (!jogador) {
+        std::cout << "Jogador " << nomeBusca << " nao encontrado!" << std::endl;
+        return;
+    }
+    int id = jogador->getId();
+    fila.enfileirar(id);
+    std::cout << "Jogador " << jogador->getNome() << " adicionado a fila com sucesso!" << std::endl;
 }
 
 void Sistema::mostrarFila() {
+    if (fila.filaVazia()) {
+        std::cout << "Fila de jogadores vazia!" << std::endl;
+        return;
+    }
+    fila.mostrarFila("Fila atual:");
 }
 
 void Sistema::iniciarPartida() {
+    if (fila.filaVazia() || fila.tamanhoFila() < 2) {
+        std::cout << "Fila de jogadores vazia/insuficiente!" << std::endl;
+        return;
+    }
+    ResultadoPartida resultado = executarPartida(jogadores, fila);
+    if (resultado.sucesso) {
+        const int recompensa = resultado.turnos * 10;
+        const int desconto = recompensa / 2;
+        Jogador *vencedor = buscarJogadorPorId(jogadores, resultado.idVencedor);
+        Jogador *perdedor = buscarJogadorPorId(jogadores, resultado.idPerdedor);
+        if (!vencedor || !perdedor) {
+            std::cout << "Jogadores nao encontrados!" << std::endl;
+            return;
+        }
+        vencedor->adicionarPontuacao(recompensa);
+        perdedor->removerPontuacao(desconto);
+        std::cout << vencedor->getNome() << ": +" << recompensa << "p." << std::endl;
+        std::cout << perdedor->getNome() << ": -" << desconto << "p." << std::endl;
+    }
 }
 
 void Sistema::registrarHistorico() {

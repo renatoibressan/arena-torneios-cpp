@@ -18,6 +18,7 @@ class Inventario {
         bool removerItem(const std::string& nome);
         Item* buscarItem(const std::string& nome);
         void listarItens() const;
+        void listarItensBatalha() const;
 };
 
 #endif

@@ -2,16 +2,17 @@
 #define FILA_PARTIDAS_H
 
 #include <queue>
-
-#include "../jogador/jogador.h"
+#include <string>
 
 class FilaPartidas {
     private:
-        std::queue<Jogador*> fila;
+        std::queue<int> fila;
     public:
-        void entrarFila(Jogador* jogador);
-        Jogador* iniciarPartida();
-        void mostrarFila();
+        void enfileirar(int id);
+        int desenfileirar();
+        void mostrarFila(const std::string& mensagem);
+        bool filaVazia() const;
+        int tamanhoFila() const;
 };
 
 #endif

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <list>
 #include <string>
 
@@ -40,4 +41,15 @@ void Inventario::listarItens() const {
         const auto& itens = tabela.at(i);
         for (const Item& item : itens) item.exibirItem();
     }
+}
+
+void Inventario::listarItensBatalha() const {
+    std::cout << "---------------------------------------------" << std::endl;
+    int idx = 1;
+    for (auto& bucket : tabela) {
+        for (auto& item : bucket) {
+            std::cout << idx++ << ". " << item.getNome() << " (Pow. " << item.getPoder() << ")" << std::endl;
+        }
+    }
+    std::cout << "---------------------------------------------" << std::endl;
 }
