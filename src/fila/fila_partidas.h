@@ -12,6 +12,7 @@ class FilaPartidas {
         int desenfileirar();
         void mostrarFila(const std::string& mensagem);
         bool filaVazia() const;
+        int tamanhoFila() const;
 };
 
 #endif

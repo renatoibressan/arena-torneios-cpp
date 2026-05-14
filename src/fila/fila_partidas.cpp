@@ -28,3 +28,7 @@ void FilaPartidas::mostrarFila(const std::string& mensagem) {
 bool FilaPartidas::filaVazia() const {
     return fila.empty();
 }
+
+int FilaPartidas::tamanhoFila() const {
+    return fila.size();
+}

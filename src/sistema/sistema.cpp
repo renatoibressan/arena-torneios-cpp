@@ -135,6 +135,10 @@ void Sistema::listarInventario() {
         std::cout << "Jogador " << nomeBusca << " nao encontrado!" << std::endl;
         return;
     }
+    if (jogador->inventarioVazio()) {
+        std::cout << jogador->getNome() << " nao tem itens para listar!" << std::endl;
+        return;
+    }
     jogador->listarItens();
 }
 
@@ -148,6 +152,10 @@ void Sistema::buscarDeInventario() {
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
     if (!jogador) {
         std::cout << "Jogador " << nomeBusca << " nao encontrado!" << std::endl;
+        return;
+    }
+    if (jogador->inventarioVazio()) {
+        std::cout << jogador->getNome() << " nao tem itens para buscar!" << std::endl;
         return;
     }
     std::string nomeItem = lerString("Insira o nome do item para busca: ");
@@ -172,6 +180,10 @@ void Sistema::removerDeInventario() {
     Jogador *jogador = buscarJogadorPorNome(jogadores, nomeBusca);
     if (!jogador) {
         std::cout << "Jogador " << nomeBusca << " nao encontrado!" << std::endl;
+        return;
+    }
+    if (jogador->inventarioVazio()) {
+        std::cout << jogador->getNome() << " nao tem itens para remover!" << std::endl;
         return;
     }
     std::string nomeItem = lerString("Insira o nome do item para remocao: ");
@@ -212,21 +224,17 @@ void Sistema::mostrarFila() {
 }
 
 void Sistema::iniciarPartida() {
-    if (fila.filaVazia()) {
+    if (fila.filaVazia() || fila.tamanhoFila() < 2) {
         std::cout << "Fila de jogadores vazia/insuficiente!" << std::endl;
         return;
     }
     int id1 = fila.desenfileirar();
-    if (fila.filaVazia()) {
-        std::cout << "Fila de jogadores vazia/insuficiente!" << std::endl;
-        return;
-    }
-    int id2 = fila.desenfileirar();
     Jogador *j1 = buscarJogadorPorId(jogadores, id1);
     if (j1->inventarioVazio()) {
         std::cout << j1->getNome() << " nao tem itens para realizar a partida!" << std::endl;
         return;
     }
+    int id2 = fila.desenfileirar();
     Jogador *j2 = buscarJogadorPorId(jogadores, id2);
     if (j2->inventarioVazio()) {
         std::cout << j2->getNome() << " nao tem itens para realizar a partida!" << std::endl;
