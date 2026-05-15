@@ -70,11 +70,16 @@ int main() {
                 sistema.iniciarPartida();
                 break;
             case 11:
+                // Exibir classificação
+                cout << endl;
+                sistema.exibirClassificacao();
+                break;
+            case 12:
                 // Desfazer do histórico
                 cout << endl;
                 sistema.desfazerHistorico();
                 break;
-            case 12:
+            case 13:
                 // Mostrar histórico completo
                 cout << endl;
                 sistema.mostrarHistorico();

@@ -43,8 +43,15 @@ std::string lerString(const std::string& mensagem) {
 
 void capitalizarString(std::string& texto) {
     if (texto.empty()) return;
-    texto[0] = std::toupper(static_cast<unsigned char>(texto[0]));
-    for (size_t i = 1; i < texto.length(); i++) {
-        texto[i] = std::tolower(static_cast<unsigned char>(texto[i]));
+    bool nextIsUpper = true;
+    for (size_t i = 0; i < texto.length(); i++) {
+        if (std::isspace(texto[i])) {
+            nextIsUpper = true;
+        } else if (nextIsUpper) {
+            texto[i] = std::toupper(texto[i]);
+            nextIsUpper = false;
+        } else {
+            texto[i] = std::tolower(texto[i]);
+        }
     }
 }

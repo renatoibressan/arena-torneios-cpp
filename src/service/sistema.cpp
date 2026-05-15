@@ -11,7 +11,7 @@
 #include "../enums/categoria.h"
 #include "../enums/tipo.h"
 
-Sistema::Sistema() : arquivo("src/data/jogadores.txt"), ultimoId(0), ordenado(false) {}
+Sistema::Sistema() : arquivo("src/data/jogadores.txt"), ultimoId(0), ordenadoPorId(false), ordenadoPorPontuacao(false) {}
 
 int Sistema::gerarNovoId() {
     return ++ultimoId;
@@ -30,8 +30,9 @@ void Sistema::menuPrincipal() {
     std::cout << "8. Adicionar jogador a fila" << std::endl;
     std::cout << "9. Mostrar fila atual" << std::endl;
     std::cout << "10. Iniciar partida" << std::endl;
-    std::cout << "11. Desfazer do historico" << std::endl;
-    std::cout << "12. Mostrar historico completo" << std::endl;
+    std::cout << "11. Exibir classificacao" << std::endl;
+    std::cout << "12. Desfazer do historico" << std::endl;
+    std::cout << "13. Mostrar historico completo" << std::endl;
     std::cout << "0. Encerrar o programa" << std::endl;
     std::cout << std::endl;
 }
@@ -51,7 +52,8 @@ void Sistema::cadastrarJogador() {
         Categoria categoria = categoriaFromString(nomeCategoria);
         jogadores.emplace_back(id, nome, categoria, vida);
         ultimoId = id;
-        ordenado = false;
+        ordenadoPorId = false;
+        ordenadoPorPontuacao = false;
         std::cout << "Jogador cadastrado com sucesso!" << std::endl;
         jogadores.back().exibirPerfil();
         historico.registrarAcao("Jogador " + nome + " cadastrado.");
@@ -65,11 +67,11 @@ void Sistema::listarJogadores() {
         std::cout << "Nao ha jogadores para exibir!" << std::endl;
         return;
     }
-    if (!ordenado) {
-        ordenarRanking(jogadores);
-        ordenado = true;
+    if (!ordenadoPorId) {
+        ordenarJogadores(jogadores, compararIds);
+        ordenadoPorId = true;
     }
-    for (Jogador jogador : jogadores) {
+    for (const Jogador& jogador : jogadores) {
         jogador.exibirPerfil();
     }
 }
@@ -257,9 +259,25 @@ void Sistema::iniciarPartida() {
     }
     vencedor->adicionarPontuacao(recompensa);
     perdedor->removerPontuacao(desconto);
+    ordenadoPorPontuacao = false;
     std::cout << vencedor->getNome() << ": +" << recompensa << "pts." << std::endl;
     std::cout << perdedor->getNome() << ": -" << desconto << "pts." << std::endl;
     historico.registrarAcao(vencedor->getNome() + " venceu partida contra " + perdedor->getNome() + ".");
+}
+
+void Sistema::exibirClassificacao() {
+    if (jogadores.empty()) {
+        std::cout << "Nao ha jogadores para exibir!" << std::endl;
+        return;
+    }
+    std::vector<Jogador> ranking = jogadores;
+    if (!ordenadoPorPontuacao) {
+        ordenarJogadores(ranking, compararPontuacao);
+        ordenadoPorPontuacao = true;
+    }
+    for (const Jogador& jogador : ranking) {
+        jogador.exibirPerfil();
+    }
 }
 
 void Sistema::desfazerHistorico() {
@@ -280,6 +298,10 @@ void Sistema::mostrarHistorico() {
 }
 
 void Sistema::salvarDados() {
+    if (!ordenadoPorId) {
+        ordenarJogadores(jogadores, compararIds);
+        ordenadoPorId = true;
+    }
     bool sucesso = arquivo.salvarJogadores(jogadores);
     (sucesso) ? std::cout << "Jogadores salvos no arquivo com sucesso!" << std::endl : std::cout << "Falha ao escrever no arquivo!" << std::endl;
     std::cout << std::endl;

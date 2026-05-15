@@ -15,7 +15,8 @@ class Sistema {
         HistoricoAcoes historico;
         Arquivo arquivo;
         int ultimoId;
-        bool ordenado;
+        bool ordenadoPorId;
+        bool ordenadoPorPontuacao;
         int gerarNovoId();
     public:
         Sistema();
@@ -30,6 +31,7 @@ class Sistema {
         void adicionarFila();
         void mostrarFila();
         void iniciarPartida();
+        void exibirClassificacao();
         void desfazerHistorico();
         void mostrarHistorico();
         void salvarDados();
