@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "../jogador/jogador.h"
+#include "../models/jogador.h"
 
 Jogador* buscarJogadorPorNome(std::vector<Jogador>& jogadores, const std::string nome);
 Jogador* buscarJogadorPorId(std::vector<Jogador>& jogadores, int id);

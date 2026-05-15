@@ -1,5 +1,6 @@
 #include <string>
 #include <unordered_map>
+#include <stdexcept>
 
 #include "tipo.h"
 
@@ -30,5 +31,5 @@ Tipo tipoFromString(const std::string& tipo) {
     };
     auto it = mapa.find(tipo);
     if (it != mapa.end()) return it->second;
-    throw "Tipo invalido!";
+    throw std::invalid_argument("Tipo invalido!");
 }

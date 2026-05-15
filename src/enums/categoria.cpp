@@ -1,5 +1,6 @@
 #include <string>
 #include <unordered_map>
+#include <stdexcept>
 
 #include "categoria.h"
 
@@ -34,5 +35,5 @@ Categoria categoriaFromString(const std::string& categoria) {
     };
     auto it = mapa.find(categoria);
     if (it != mapa.end()) return it->second;
-    throw "Categoria invalida!";
+    throw std::invalid_argument("Categoria invalida!");
 }

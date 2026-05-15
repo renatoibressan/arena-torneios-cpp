@@ -1,23 +1,25 @@
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 #include "sistema.h"
+#include "sistema_partidas.h"
 #include "../utils/utils.h"
-#include "../jogador/jogador.h"
-#include "../categoria/categoria.h"
-#include "../item/item.h"
-#include "../tipo/tipo.h"
-#include "../algoritmos/algoritmos.h"
-#include "../partidas/sistema_partidas.h"
+#include "../utils/algoritmos.h"
+#include "../models/jogador.h"
+#include "../models/item.h"
+#include "../enums/categoria.h"
+#include "../enums/tipo.h"
 
-Sistema::Sistema() : ultimoId(0), ordenado(false) {}
+Sistema::Sistema() : arquivo("src/data/jogadores.txt"), ultimoId(0), ordenado(false) {}
 
 int Sistema::gerarNovoId() {
     return ++ultimoId;
 }
 
 void Sistema::menuPrincipal() {
-    std::cout << std::endl << "====== MENU PRINCIPAL ======" << std::endl;
+    std::cout << std::endl;
+    std::cout << "============ MENU PRINCIPAL ============" << std::endl;
     std::cout << "1. Cadastrar jogador" << std::endl;
     std::cout << "2. Listar jogadores" << std::endl;
     std::cout << "3. Buscar jogador" << std::endl;
@@ -30,7 +32,8 @@ void Sistema::menuPrincipal() {
     std::cout << "10. Iniciar partida" << std::endl;
     std::cout << "11. Desfazer do historico" << std::endl;
     std::cout << "12. Mostrar historico completo" << std::endl;
-    std::cout << "0. Encerrar o programa" << std::endl << std::endl;
+    std::cout << "0. Encerrar o programa" << std::endl;
+    std::cout << std::endl;
 }
 
 void Sistema::cadastrarJogador() {
@@ -52,8 +55,8 @@ void Sistema::cadastrarJogador() {
         std::cout << "Jogador cadastrado com sucesso!" << std::endl;
         jogadores.back().exibirPerfil();
         historico.registrarAcao("Jogador " + nome + " cadastrado.");
-    } catch (const char *e) {
-        std::cerr << "Nao foi possivel cadastrar o jogador: " << e << std::endl;
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Nao foi possivel cadastrar o jogador: " << e.what() << std::endl;
     }
 }
 
@@ -121,8 +124,8 @@ void Sistema::inserirEmInventario() {
         std::cout << "Item inserido no inventario de " << jogador->getNome() << " com sucesso!" << std::endl;
         item.exibirItem();
         historico.registrarAcao("Item " + nomeItem + " inserido no inventario de " + jogador->getNome() + ".");
-    } catch (const char *e) {
-        std::cerr << "Nao foi possivel inserir o item no inventario do jogador " << jogador->getNome() << ": " << e << std::endl;
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Nao foi possivel inserir o item no inventario do jogador " << jogador->getNome() << ": " << e.what() << std::endl;
     }
 }
 
@@ -274,4 +277,20 @@ void Sistema::mostrarHistorico() {
         return;
     }
     historico.mostrarHistorico("Historico completo:");
+}
+
+void Sistema::salvarDados() {
+    bool sucesso = arquivo.salvarJogadores(jogadores);
+    (sucesso) ? std::cout << "Jogadores salvos no arquivo com sucesso!" << std::endl : std::cout << "Falha ao escrever no arquivo!" << std::endl;
+    std::cout << std::endl;
+}
+
+void Sistema::carregarDados() {
+    std::cout << std::endl;
+    if (!arquivo.arquivoExiste()) {
+        std::cout << "Arquivo nao encontrado/sem registros!" << std::endl;
+        return;
+    }
+    bool sucesso = arquivo.carregarJogadores(jogadores, ultimoId);
+    (sucesso) ? std::cout << "Jogadores carregados do arquivo com sucesso!" << std::endl : std::cout << "Falha ao ler do arquivo!" << std::endl;
 }

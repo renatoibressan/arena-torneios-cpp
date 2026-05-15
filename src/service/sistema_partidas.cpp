@@ -3,7 +3,7 @@
 #include <string>
 
 #include "sistema_partidas.h"
-#include "../jogador/jogador.h"
+#include "../models/jogador.h"
 #include "../utils/utils.h"
 
 ResultadoPartida executarPartida(Jogador *j1, Jogador *j2) {

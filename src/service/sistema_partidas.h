@@ -1,7 +1,7 @@
 #ifndef SISTEMA_PARTIDAS_H
 #define SISTEMA_PARTIDAS_H
 
-#include "../jogador/jogador.h"
+#include "../models/jogador.h"
 
 struct ResultadoPartida {
     int idVencedor;

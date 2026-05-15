@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "../categoria/categoria.h"
-#include "../inventario/inventario.h"
-#include "../item/item.h"
+#include "inventario.h"
+#include "item.h"
+#include "../enums/categoria.h"
 
 class Jogador {
     private:
@@ -26,10 +26,12 @@ class Jogador {
         void listarItensBatalha() const;
         bool inventarioVazio() const;
         void exibirPerfil() const;
-        const std::string& getNome() const;
         int getId() const;
+        const std::string& getNome() const;
+        Categoria getCategoria() const;
         int getVida() const;
         int getPontuacao() const;
+        void setPontuacao(int pontuacao);
 };
 
 #endif

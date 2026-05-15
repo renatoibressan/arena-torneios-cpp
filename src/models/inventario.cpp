@@ -3,7 +3,7 @@
 #include <string>
 
 #include "inventario.h"
-#include "../item/item.h"
+#include "item.h"
 
 Inventario::Inventario(int tamanhoTabela) : tamanhoTabela(tamanhoTabela), quantidadeItens(0) {
     tabela.resize(tamanhoTabela);

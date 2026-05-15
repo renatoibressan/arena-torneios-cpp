@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../tipo/tipo.h"
+#include "../enums/tipo.h"
 
 class Item {
     private:

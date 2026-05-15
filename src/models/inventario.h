@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 
-#include "../item/item.h"
+#include "item.h"
 
 class Inventario {
     private:

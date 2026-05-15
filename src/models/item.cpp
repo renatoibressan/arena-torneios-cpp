@@ -2,7 +2,7 @@
 #include <string>
 
 #include "item.h"
-#include "../tipo/tipo.h"
+#include "../enums/tipo.h"
 
 Item::Item(std::string nome, Tipo tipo, int raridade, int poder) : nome(nome), tipo(tipo), raridade(raridade), poder(poder) {}
 

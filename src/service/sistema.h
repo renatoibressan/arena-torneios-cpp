@@ -3,15 +3,17 @@
 
 #include <vector>
 
-#include "../jogador/jogador.h"
-#include "../fila/fila_partidas.h"
-#include "../historico/historico_acoes.h"
+#include "fila_partidas.h"
+#include "historico_acoes.h"
+#include "../models/jogador.h"
+#include "../repository/arquivo.h"
 
 class Sistema {
     private:
         std::vector<Jogador> jogadores;
         FilaPartidas fila;
         HistoricoAcoes historico;
+        Arquivo arquivo;
         int ultimoId;
         bool ordenado;
         int gerarNovoId();
@@ -30,6 +32,8 @@ class Sistema {
         void iniciarPartida();
         void desfazerHistorico();
         void mostrarHistorico();
+        void salvarDados();
+        void carregarDados();
 };
 
 #endif

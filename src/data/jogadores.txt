@@ -1,0 +1,2 @@
+1;Renato;Monge;150;0
+2;Aryan;Mago;160;0

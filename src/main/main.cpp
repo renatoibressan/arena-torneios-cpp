@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "../sistema/sistema.h"
+#include "../service/sistema.h"
 #include "../utils/utils.h"
 
 using namespace std;
@@ -11,8 +11,9 @@ int main() {
     Sistema sistema;
     srand(time(nullptr));
     limparTela();
-    cout << endl << "===== ARENA DE TORNEIOS =====" << endl;
+    cout << endl << "================ ARENA DE TORNEIOS ================" << endl;
     cout << "Desenvolvido por: Renato Ikeda Bressan" << endl;
+    sistema.carregarDados();
     while (true) {
         sistema.menuPrincipal();
         bool flag = false;
@@ -80,12 +81,13 @@ int main() {
                 break;
             case 0:
                 // Encerrar o programa
-                cout << endl << "Encerrando o programa..." << endl << endl;
+                cout << endl << "Encerrando o programa..." << endl;
                 flag = true;
                 break;
             default: cout << endl << "Opcao invalida!" << endl << "Retornando ao menu principal..." << endl;
         }
         if (flag) break;
     }
+    sistema.salvarDados();
     return 0;
 }

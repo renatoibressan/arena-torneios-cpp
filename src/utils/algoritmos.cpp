@@ -1,9 +1,9 @@
+#include <cstdlib>
 #include <vector>
 #include <string>
-#include <cstdlib>
 
 #include "algoritmos.h"
-#include "../jogador/jogador.h"
+#include "../models/jogador.h"
 
 Jogador* buscarJogadorPorNome(std::vector<Jogador>& jogadores, const std::string nome) {
     for (Jogador& jogador : jogadores) if (jogador.getNome() == nome) return &jogador;

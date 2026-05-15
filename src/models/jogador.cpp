@@ -3,9 +3,9 @@
 #include <algorithm>
 
 #include "jogador.h"
-#include "../categoria/categoria.h"
-#include "../inventario/inventario.h"
-#include "../item/item.h"
+#include "inventario.h"
+#include "item.h"
+#include "../enums/categoria.h"
 
 Jogador::Jogador(int id, const std::string& nome, Categoria categoria, int vida) : id(id), nome(nome), categoria(categoria), vida(vida), pontuacao(0), inventario(10) {}
 
@@ -45,17 +45,21 @@ void Jogador::exibirPerfil() const {
     std::cout << "------------------------------" << std::endl;
     std::cout << "Jogador #" << id << ": " << nome << std::endl;
     std::cout << "Categoria: " << categoriaToString(categoria) << std::endl;
-    std::cout << "Pontuacao atual: " << pontuacao << std::endl;
     std::cout << "Vida total: " << vida << std::endl;
+    std::cout << "Pontuacao atual: " << pontuacao << std::endl;
     std::cout << "------------------------------" << std::endl;
+}
+
+int Jogador::getId() const {
+    return id;
 }
 
 const std::string& Jogador::getNome() const {
     return nome;
 }
 
-int Jogador::getId() const {
-    return id;
+Categoria Jogador::getCategoria() const {
+    return categoria;
 }
 
 int Jogador::getVida() const {
@@ -64,4 +68,8 @@ int Jogador::getVida() const {
 
 int Jogador::getPontuacao() const {
     return pontuacao;
+}
+
+void Jogador::setPontuacao(int pontuacao) {
+    this->pontuacao = pontuacao;
 }
