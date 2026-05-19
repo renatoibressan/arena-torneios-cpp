@@ -15,7 +15,7 @@ Arquivo::Arquivo(const std::string& caminho) : caminho(caminho) {}
 bool Arquivo::salvarJogadores(const std::vector<Jogador>& jogadores) const {
     std::ofstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
-    arquivo << "id,nome,vida,pontuacao\n";
+    arquivo << "id,nome,categoria,vida,pontuacao\n";
     for (const Jogador& jogador : jogadores) {
         arquivo << jogador.getId() << "," 
                 << jogador.getNome() << "," 
