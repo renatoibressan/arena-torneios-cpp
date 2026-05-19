@@ -11,7 +11,7 @@
 #include "../enums/categoria.h"
 #include "../enums/tipo.h"
 
-Sistema::Sistema() : arquivo("src/data/jogadores.txt"), ultimoId(0), ordenadoPorId(false), ordenadoPorPontuacao(false) {}
+Sistema::Sistema() : arquivo("src/data/jogadores.csv"), ultimoId(0), ordenadoPorId(false), ordenadoPorPontuacao(false) {}
 
 int Sistema::gerarNovoId() {
     return ++ultimoId;

@@ -15,11 +15,12 @@ Arquivo::Arquivo(const std::string& caminho) : caminho(caminho) {}
 bool Arquivo::salvarJogadores(const std::vector<Jogador>& jogadores) const {
     std::ofstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
+    arquivo << "id,nome,vida,pontuacao\n";
     for (const Jogador& jogador : jogadores) {
-        arquivo << jogador.getId() << ";" 
-                << jogador.getNome() << ";" 
-                << categoriaToString(jogador.getCategoria()) << ";" 
-                << jogador.getVida() << ";"
+        arquivo << jogador.getId() << "," 
+                << jogador.getNome() << "," 
+                << categoriaToString(jogador.getCategoria()) << "," 
+                << jogador.getVida() << ","
                 << jogador.getPontuacao() << "\n";
     }
     return true;
@@ -30,22 +31,23 @@ bool Arquivo::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) 
     if (!arquivo.is_open()) return false;
     std::string linha;
     ultimoId = 0;
+    std::getline(arquivo, linha);
     while (std::getline(arquivo, linha)) {
         try {
             std::stringstream ss(linha);
             std::string idStr;
-            std::getline(ss, idStr, ';');
+            std::getline(ss, idStr, ',');
             int id = std::stoi(idStr);
             std::string nome;
-            std::getline(ss, nome, ';');
+            std::getline(ss, nome, ',');
             std::string categoriaStr;
-            std::getline(ss, categoriaStr, ';');
+            std::getline(ss, categoriaStr, ',');
             Categoria categoria = categoriaFromString(categoriaStr);
             std::string vidaStr;
-            std::getline(ss, vidaStr, ';');
+            std::getline(ss, vidaStr, ',');
             int vida = std::stoi(vidaStr);
             std::string pontuacaoStr;
-            std::getline(ss, pontuacaoStr, ';');
+            std::getline(ss, pontuacaoStr, ',');
             int pontuacao = std::stoi(pontuacaoStr);
             Jogador jogador = Jogador(id, nome, categoria, vida);
             jogador.setPontuacao(pontuacao);
