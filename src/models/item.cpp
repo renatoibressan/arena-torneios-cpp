@@ -19,6 +19,14 @@ std::string Item::getNome() const {
     return nome;
 }
 
+Tipo Item::getTipo() const {
+    return tipo;
+}
+        
+int Item::getRaridade() const {
+    return raridade;
+}
+
 int Item::getPoder() const {
     return poder;
 }

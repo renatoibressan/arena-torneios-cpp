@@ -15,6 +15,8 @@ class Item {
         Item(std::string nome, Tipo tipo, int raridade, int poder);
         void exibirItem() const;
         std::string getNome() const;
+        Tipo getTipo() const;
+        int getRaridade() const;
         int getPoder() const;
 };
 

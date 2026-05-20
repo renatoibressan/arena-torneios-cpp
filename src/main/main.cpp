@@ -35,51 +35,66 @@ int main() {
                 sistema.buscarJogador();
                 break;
             case 4:
+                // Registrar item
+                cout << endl;
+                sistema.registrarItem();
+                break;
+            case 5:
+                // Listar itens
+                cout << endl;
+                sistema.listarItens();
+                break;
+            case 6:
+                // Buscar item
+                cout << endl;
+                sistema.buscarItem();
+                break;
+            case 7:
                 // Inserir item em inventário de jogador
                 cout << endl;
                 sistema.inserirEmInventario();
                 break;
-            case 5:
+            case 8:
                 // Listar itens de inventário de jogador
                 cout << endl;
                 sistema.listarInventario();
                 break;
-            case 6:
+            case 9:
                 // Buscar item de inventário de jogador
                 cout << endl;
                 sistema.buscarDeInventario();
                 break;
-            case 7:
+            case 10:
                 // Remover item de inventário de jogador
                 cout << endl;
                 sistema.removerDeInventario();
                 break;
-            case 8:
+            case 11:
                 // Adicionar jogador à fila
                 cout << endl;
                 sistema.adicionarFila();
                 break;
-            case 9:
+            case 12:
                 // Mostrar fila atual
                 cout << endl;
                 sistema.mostrarFila();
                 break;
-            case 10:
+            case 13:
                 // Iniciar partida
                 cout << endl;
                 sistema.iniciarPartida();
                 break;
-            case 11:
+            case 14:
                 // Exibir classificação
                 cout << endl;
                 sistema.exibirClassificacao();
                 break;
-            case 12:
+            case 15:
                 // Desfazer do histórico
                 cout << endl;
                 sistema.desfazerHistorico();
                 break;
-            case 13:
+            case 16:
                 // Mostrar histórico completo
                 cout << endl;
                 sistema.mostrarHistorico();

@@ -6,13 +6,13 @@
 #include <stdexcept>
 #include <filesystem>
 
-#include "arquivo.h"
+#include "arquivo_jogadores.h"
 #include "../models/jogador.h"
 #include "../enums/categoria.h"
 
-Arquivo::Arquivo(const std::string& caminho) : caminho(caminho) {}
+ArquivoJogadores::ArquivoJogadores(const std::string& caminho) : caminho(caminho) {}
 
-bool Arquivo::salvarJogadores(const std::vector<Jogador>& jogadores) const {
+bool ArquivoJogadores::salvarJogadores(const std::vector<Jogador>& jogadores) const {
     std::ofstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
     arquivo << "id,nome,categoria,vida,pontuacao\n";
@@ -26,7 +26,7 @@ bool Arquivo::salvarJogadores(const std::vector<Jogador>& jogadores) const {
     return true;
 }
 
-bool Arquivo::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) const {
+bool ArquivoJogadores::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) const {
     std::ifstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
     std::string linha;
@@ -60,6 +60,6 @@ bool Arquivo::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) 
     return true;
 }
 
-bool Arquivo::arquivoExiste() const {
+bool ArquivoJogadores::arquivoExiste() const {
     return std::filesystem::exists(caminho);
 }
