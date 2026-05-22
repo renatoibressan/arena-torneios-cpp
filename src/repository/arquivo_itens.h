@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "../models/item.h"
 
@@ -11,8 +12,8 @@ class ArquivoItens {
         std::string caminho;
     public:
         ArquivoItens(const std::string& caminho);
-        bool salvarItens(const std::vector<Item>& itens) const;
-        bool carregarItens(std::vector<Item>& itens) const;
+        bool salvarItens(const std::vector<std::unique_ptr<Item>>& itens) const;
+        bool carregarItens(std::vector<std::unique_ptr<Item>>& itens);
         bool arquivoExiste() const;
 };
 

@@ -1,23 +1,21 @@
-#ifndef ITEM_H
-#define ITEM_H
+#pragma once
 
 #include <string>
 
 #include "../enums/tipo.h"
 
+class Jogador;
+
 class Item {
-    private:
+    protected:
         std::string nome;
         Tipo tipo;
-        int raridade;
-        int poder;
     public:
-        Item(std::string nome, Tipo tipo, int raridade, int poder);
-        void exibirItem() const;
+        Item(std::string nome, Tipo tipo);
+        virtual ~Item() = default;
+        virtual void exibirItem() const = 0;
+        virtual void usar(Jogador& usuario, Jogador& oponente, int &vidaUsuario, int &vidaOponente) = 0;
+        virtual std::string serializar() const = 0;
         std::string getNome() const;
         Tipo getTipo() const;
-        int getRaridade() const;
-        int getPoder() const;
 };
-
-#endif

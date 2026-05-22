@@ -1,2 +1,3 @@
-nome,tipo,raridade,poder
-Excalibur,Espada,5,900
+tipo,nome,dano,cura
+Arma,Espada,500,
+Pocao,Pocao Generica,,200

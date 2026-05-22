@@ -51,7 +51,7 @@ bool ArquivoJogadores::carregarJogadores(std::vector<Jogador>& jogadores, int& u
             int pontuacao = std::stoi(pontuacaoStr);
             Jogador jogador = Jogador(id, nome, categoria, vida);
             jogador.setPontuacao(pontuacao);
-            jogadores.push_back(jogador);
+            jogadores.push_back(std::move(jogador));
             ultimoId = std::max(ultimoId, id);
         } catch (const std::invalid_argument& e) {
             std::cerr << "Erro ao ler linha " << linha << ": " << e.what() <<std::endl;

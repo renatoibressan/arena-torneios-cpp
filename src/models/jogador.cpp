@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 #include <string>
 #include <algorithm>
+#include <memory>
 
 #include "jogador.h"
 #include "inventario.h"
@@ -17,11 +19,11 @@ void Jogador::removerPontuacao(int valor) {
     pontuacao = std::max(0, pontuacao - valor);
 }
 
-void Jogador::inserirItem(const Item& item) {
-    inventario.inserirItem(item);
+void Jogador::inserirItem(std::unique_ptr<Item> item) {
+    inventario.inserirItem(std::move(item));
 }
 
-bool Jogador::removerItem(const std::string& nome) {
+std::unique_ptr<Item> Jogador::removerItem(const std::string& nome) {
     return inventario.removerItem(nome);
 }
 
@@ -39,6 +41,10 @@ void Jogador::listarItensBatalha() const {
 
 bool Jogador::inventarioVazio() const {
     return inventario.inventarioVazio();
+}
+
+std::vector<std::unique_ptr<Item>> Jogador::extrairItens() {
+    return inventario.extrairItens();
 }
 
 void Jogador::exibirPerfil() const {

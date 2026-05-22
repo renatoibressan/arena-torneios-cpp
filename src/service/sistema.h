@@ -2,6 +2,7 @@
 #define SISTEMA_H
 
 #include <vector>
+#include <memory>
 
 #include "fila_partidas.h"
 #include "historico_acoes.h"
@@ -13,7 +14,7 @@
 class Sistema {
     private:
         std::vector<Jogador> jogadores;
-        std::vector<Item> itens;
+        std::vector<std::unique_ptr<Item>> itensDisponiveis;
         FilaPartidas fila;
         HistoricoAcoes historico;
         ArquivoJogadores arquivoJogadores;

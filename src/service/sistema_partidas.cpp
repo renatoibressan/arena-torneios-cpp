@@ -40,18 +40,14 @@ ResultadoPartida executarPartida(Jogador *j1, Jogador *j2) {
             capitalizarString(nomeItem2);
             itemJ2 = primeiro->buscarItem(nomeItem2);
         }
-        int danoJ1 = itemJ1->getPoder() / 10;
-        std::cout << std::endl << segundo->getNome() << " recebeu " << danoJ1 << " pontos de dano!" << std::endl;
-        vidaJ2 -= danoJ1;
+        itemJ1->usar(*primeiro, *segundo, vidaJ1, vidaJ2);
         if (vidaJ2 <= 0) {
             std::cout << std::endl << segundo->getNome() << " foi nocauteado em  " << turnos << " turnos!" << std::endl;
             std::cout << primeiro->getNome() << " foi o vencedor da partida!" << std::endl;
             std::cout << "---------------------------------------------" << std::endl;
             return {primeiro->getId(), segundo->getId(), turnos};
         }
-        int danoJ2 = itemJ2->getPoder() / 10;
-        std::cout << std::endl << primeiro->getNome() << " recebeu " << danoJ2 << " pontos de dano!" << std::endl;
-        vidaJ1 -= danoJ2;
+        itemJ2->usar(*segundo, *primeiro, vidaJ2, vidaJ1);
         if (vidaJ1 <= 0) {
             std::cout << std::endl << primeiro->getNome() << " foi nocauteado em " << turnos << " turnos!" << std::endl;
             std::cout << segundo->getNome() << " foi o vencedor da partida!" << std::endl;

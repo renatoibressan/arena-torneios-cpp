@@ -40,12 +40,12 @@ int main() {
                 sistema.registrarItem();
                 break;
             case 5:
-                // Listar itens
+                // Listar itens disponíveis
                 cout << endl;
                 sistema.listarItens();
                 break;
             case 6:
-                // Buscar item
+                // Buscar item disponível
                 cout << endl;
                 sistema.buscarItem();
                 break;

@@ -2,6 +2,7 @@
 #include <string>
 #include <stdexcept>
 #include <algorithm>
+#include <memory>
 
 #include "sistema.h"
 #include "sistema_partidas.h"
@@ -9,6 +10,8 @@
 #include "../utils/algoritmos.h"
 #include "../models/jogador.h"
 #include "../models/item.h"
+#include "../models/item_arma.h"
+#include "../models/item_pocao.h"
 #include "../enums/categoria.h"
 #include "../enums/tipo.h"
 
@@ -23,18 +26,18 @@ bool Sistema::jogadorExiste(const std::string& nome) {
     return std::any_of(
         jogadores.begin(),
         jogadores.end(),
-        [&](const Jogador& j) {
-            return j.getNome() == nome;
+        [&](const Jogador& jogador) {
+            return jogador.getNome() == nome;
         }
     );
 }
 
 bool Sistema::itemExiste(const std::string& nome) {
     return std::any_of(
-        itens.begin(),
-        itens.end(),
-        [&](const Item& i) {
-            return i.getNome() == nome;
+        itensDisponiveis.begin(),
+        itensDisponiveis.end(),
+        [&](const std::unique_ptr<Item>& item) {
+            return item->getNome() == nome;
         }
     );
 }
@@ -46,8 +49,8 @@ void Sistema::menuPrincipal() {
     std::cout << "| 2. Listar jogadores                          |" << std::endl;
     std::cout << "| 3. Buscar jogador                            |" << std::endl;
     std::cout << "| 4. Registrar item                            |" << std::endl;
-    std::cout << "| 5. Listar itens                              |" << std::endl;
-    std::cout << "| 6. Buscar item                               |" << std::endl;
+    std::cout << "| 5. Listar itens disponiveis                  |" << std::endl;
+    std::cout << "| 6. Buscar item disponivel                    |" << std::endl;
     std::cout << "| 7. Inserir item em inventario de jogador     |" << std::endl;
     std::cout << "| 8. Listar itens de inventario de jogador     |" << std::endl;
     std::cout << "| 9. Buscar item de inventario de jogador      |" << std::endl;
@@ -74,13 +77,14 @@ void Sistema::cadastrarJogador() {
     std::string nomeCategoria = lerString("Insira a categoria do jogador: ");
     capitalizarString(nomeCategoria);
     int vida = lerInt("Insira a quantidade de vida total do jogador: ");
-    while (vida < 0 || vida > 200) {
+    while (vida < 50 || vida > 200) {
         std::cout << "Valor de quantidade de vida invalido!" << std::endl;
         vida = lerInt("Insira a quantidade de vida total do jogador: ");
     }
     try {
         Categoria categoria = categoriaFromString(nomeCategoria);
-        jogadores.emplace_back(id, nome, categoria, vida);
+        Jogador jogador = Jogador(id, nome, categoria, vida);
+        jogadores.push_back(std::move(jogador));
         ultimoId = id;
         ordenadoPorId = false;
         ordenadoPorPontuacao = false;
@@ -98,7 +102,11 @@ void Sistema::listarJogadores() {
         return;
     }
     if (!ordenadoPorId) {
-        ordenarDados(jogadores, compararIds);
+        ordenarDados(jogadores,
+            [](const Jogador& a, const Jogador& b) {
+                return a.getId() < b.getId();
+            }
+        );
         ordenadoPorId = true;
     }
     for (const Jogador& jogador : jogadores) {
@@ -127,28 +135,35 @@ void Sistema::buscarJogador() {
 void Sistema::registrarItem() {
     std::string nome = lerString("Insira o nome do item: ");
     capitalizarString(nome);
-    if (!itens.empty() && itemExiste(nome)) {
+    if (!itensDisponiveis.empty() && itemExiste(nome)) {
         std::cout << "Ja existe um item com o nome " << nome << "!" << std::endl;
         return;
     }
-    std::string tipoItem = lerString("Insira o tipo do item: ");
+    std::string tipoItem = lerString("Insira o tipo do item (arma/pocao): ");
     capitalizarString(tipoItem);
-    int raridade = lerInt("Insira o grau de raridade do item: ");
-    while (raridade < 1 || raridade > 5) {
-        std::cout << "Valor de grau de raridade invalido!" << std::endl;
-        raridade = lerInt("Insira o grau de raridade do item: ");
-    }
-    int poder = lerInt("Insira o poder de dano do item: ");
-    while (poder <= 0 || poder > 1000 || poder % 10 != 0) {
-        std::cout << "Valor de poder de dano invalido!" << std::endl;
-        poder = lerInt("Insira o poder de dano do item: ");
-    }
     try {
         Tipo tipo = tipoFromString(tipoItem);
-        itens.emplace_back(nome, tipo, raridade, poder);
+        if (tipo == Tipo::Arma) {
+            int dano = lerInt("Insira o quantificador de dano do item: ");
+            while (dano < 100 || dano > 1000 || dano % 10 != 0) {
+                std::cout << "Valor de dano invalido!" << std::endl;
+                dano = lerInt("Insira o quantificador de dano do item: ");
+            }
+            std::unique_ptr<Arma> arma = std::make_unique<Arma>(nome, dano);
+            itensDisponiveis.push_back(std::move(arma));
+        }
+        if (tipo == Tipo::Pocao) {
+            int cura = lerInt("Insira o quantificador de cura do item: ");
+            while (cura < 100 || cura > 2000 || cura % 10 != 0) {
+                std::cout << "Valor de cura invalida!" << std::endl;
+                cura = lerInt("Insira o quantificador de cura do item: ");
+            }
+            std::unique_ptr<Pocao> pocao = std::make_unique<Pocao>(nome, cura);
+            itensDisponiveis.push_back(std::move(pocao));
+        }
         ordenadoPorNome = false;
         std::cout << "Item " << nome << " registrado com sucesso!" << std::endl;
-        itens.back().exibirItem();
+        itensDisponiveis.back()->exibirItem();
         historico.registrarAcao("Item " + nome + " registrado.");
     } catch (const std::invalid_argument& e) {
         std::cerr << "Nao foi possivel registrar o item: " << e.what() << std::endl;
@@ -156,44 +171,56 @@ void Sistema::registrarItem() {
 }
 
 void Sistema::listarItens() {
-    if (itens.empty()) {
+    if (itensDisponiveis.empty()) {
         std::cout << "Nao ha itens para exibir!" << std::endl;
         return;
     }
     if (!ordenadoPorNome) {
-        ordenarDados(itens, compararNome);
+        ordenarDados(itensDisponiveis, 
+            [](const std::unique_ptr<Item>& a, const std::unique_ptr<Item>& b) {
+                return a->getNome() < b->getNome();
+            }
+        );
         ordenadoPorNome = true;
     }
-    for (const Item& item : itens) {
-        item.exibirItem();
+    for (const auto& item : itensDisponiveis) {
+        item->exibirItem();
     }
-    std::cout << itens.size() << " itens exibidos com sucesso!" << std::endl;
+    std::cout << itensDisponiveis.size() << " itens exibidos com sucesso!" << std::endl;
 }
 
 void Sistema::buscarItem() {
-    if (itens.empty()) {
+    if (itensDisponiveis.empty()) {
         std::cout << "Nao ha itens para buscar!" << std::endl;
         return;
     }
     if (!ordenadoPorNome) {
-        ordenarDados(itens, compararNome);
+        ordenarDados(itensDisponiveis, 
+            [](const std::unique_ptr<Item>& a, const std::unique_ptr<Item>& b) {
+                return a->getNome() < b->getNome();
+            }
+        );
         ordenadoPorNome = true;
     }
     std::string nomeBusca = lerString("Insira o nome do item para busca: ");
     capitalizarString(nomeBusca);
-    Item *item = buscarItemPorNome(itens, nomeBusca);
-    if (!item) {
+    auto item = buscarItemPorNome(itensDisponiveis, nomeBusca);
+    if (item == itensDisponiveis.end()) {
         std::cout << "Item " << nomeBusca << " nao encontrado!" << std::endl;
         return;
     }
     std::cout << "Item encontrado!" << std::endl;
-    item->exibirItem();
-    std::cout << "Item " << item->getNome() << " exibido com sucesso!" << std::endl;
+    (*item)->exibirItem();
+    std::cout << "Item " << (*item)->getNome() << " exibido com sucesso!" << std::endl;
 }
 
 void Sistema::inserirEmInventario() {
-    if (jogadores.empty() || itens.empty()) {
+    if (jogadores.empty()) {
         std::cout << "Nao ha jogadores para buscar!" << std::endl;
+        return;
+    }
+    if (itensDisponiveis.empty()) {
+        std::cout << "Nao ha itens para buscar!" << std::endl;
         return;
     }
     std::string nomeBusca = lerString("Insira o nome do jogador para busca: ");
@@ -205,14 +232,15 @@ void Sistema::inserirEmInventario() {
     }
     std::string nomeItem = lerString("Insira o nome do item: ");
     capitalizarString(nomeItem);
-    Item *item = buscarItemPorNome(itens, nomeItem);
-    if (!item) {
+    auto item = buscarItemPorNome(itensDisponiveis, nomeItem);
+    if (item == itensDisponiveis.end()) {
         std::cout << "Item " << nomeBusca << " nao encontrado!" << std::endl;
         return;
     }
-    jogador->inserirItem(*item);
-    std::cout << "Item " << item->getNome() << " inserido no inventario de " << jogador->getNome() << " com sucesso!" << std::endl;
-    historico.registrarAcao("Item " + item->getNome() + " inserido no inventario de " + jogador->getNome() + ".");
+    jogador->inserirItem(std::move(*item));
+    itensDisponiveis.erase(item);
+    std::cout << "Item " << nomeItem << " inserido no inventario de " << jogador->getNome() << " com sucesso!" << std::endl;
+    historico.registrarAcao("Item " + nomeItem + " inserido no inventario de " + jogador->getNome() + ".");
 }
 
 void Sistema::listarInventario() {
@@ -280,9 +308,15 @@ void Sistema::removerDeInventario() {
     }
     std::string nomeItem = lerString("Insira o nome do item para remocao: ");
     capitalizarString(nomeItem);
-    bool removido = jogador->removerItem(nomeItem);
-    (!removido) ? std::cout << "Item " << nomeItem << " nao encontrado!" << std::endl : std::cout << "Item " << nomeItem << " removido com sucesso!" << std::endl;
-    if (removido) historico.registrarAcao("Item " + nomeItem + " removido do inventario de " + jogador->getNome() + ".");
+    auto item = jogador->removerItem(nomeItem);
+    if (!item) {
+        std::cout << "Item " << nomeItem << " nao encontrado!" << std::endl;
+        return;
+    }
+    itensDisponiveis.push_back(std::move(item));
+    ordenadoPorNome = false;
+    std::cout << "Item " << nomeItem << " removido com sucesso!" << std::endl;
+    historico.registrarAcao("Item " + nomeItem + " removido do inventario de " + jogador->getNome() + ".");
 }
 
 void Sistema::adicionarFila() {
@@ -354,13 +388,20 @@ void Sistema::exibirClassificacao() {
         std::cout << "Nao ha jogadores para exibir!" << std::endl;
         return;
     }
-    std::vector<Jogador> ranking = jogadores;
+    std::vector<Jogador*> ranking;
+    for (auto& jogador : jogadores) {
+        ranking.push_back(&jogador);
+    }
     if (!ordenadoPorPontuacao) {
-        ordenarDados(ranking, compararPontuacao);
+        ordenarDados(ranking,
+            [](Jogador* a, Jogador* b) {
+                return a->getPontuacao() > b->getPontuacao();
+            }
+        );
         ordenadoPorPontuacao = true;
     }
-    for (const Jogador& jogador : ranking) {
-        jogador.exibirPerfil();
+    for (const Jogador* jogador : ranking) {
+        jogador->exibirPerfil();
     }
 }
 
@@ -382,15 +423,27 @@ void Sistema::mostrarHistorico() {
 }
 
 void Sistema::salvarDados() {
-    if (!ordenadoPorId) {
-        ordenarDados(jogadores, compararIds);
-        ordenadoPorId = true;
+    for (Jogador& jogador : jogadores) {
+        auto itens = jogador.extrairItens();
+        for (auto& item : itens) {
+            itensDisponiveis.push_back(std::move(item));
+        }
     }
+    ordenarDados(jogadores,
+        [](const Jogador& a, const Jogador& b) {
+            return a.getId() < b.getId();
+        }
+    );
+    ordenarDados(itensDisponiveis, 
+        [](const std::unique_ptr<Item>& a, const std::unique_ptr<Item>& b) {
+            return a->getNome() < b->getNome();
+        }
+    );
     bool sucessoJogadores = arquivoJogadores.salvarJogadores(jogadores);
-    bool sucessoItens = arquivoItens.salvarItens(itens);
+    bool sucessoItens = arquivoItens.salvarItens(itensDisponiveis);
     (sucessoJogadores) ? std::cout << jogadores.size() << " jogadores salvos no arquivo com sucesso!" << std::endl 
                         : std::cout << "Falha ao escrever no arquivo de jogadores!" << std::endl;
-    (sucessoItens) ? std::cout << itens.size() << " itens salvos no arquivo com sucesso!" << std::endl 
+    (sucessoItens) ? std::cout << itensDisponiveis.size() << " itens salvos no arquivo com sucesso!" << std::endl 
                     : std::cout << "Falha ao escrever no arquivo de itens!" << std::endl;
     std::cout << std::endl;
 }
@@ -406,9 +459,9 @@ void Sistema::carregarDados() {
         return;
     }
     bool sucessoJogadores = arquivoJogadores.carregarJogadores(jogadores, ultimoId);
-    bool sucessoItens = arquivoItens.carregarItens(itens);
+    bool sucessoItens = arquivoItens.carregarItens(itensDisponiveis);
     (sucessoJogadores) ? std::cout << jogadores.size() << " jogadores carregados do arquivo com sucesso!" << std::endl 
                         : std::cout << "Falha ao ler do arquivo de jogadores!" << std::endl;
-    (sucessoItens) ? std::cout << itens.size() << " itens carregados do arquivo com sucesso!" << std::endl 
+    (sucessoItens) ? std::cout << itensDisponiveis.size() << " itens carregados do arquivo com sucesso!" << std::endl 
                     : std::cout << "Falha ao ler do arquivo de itens!" << std::endl;
 }

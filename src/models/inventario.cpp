@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 #include <list>
 #include <string>
+#include <memory>
 
 #include "inventario.h"
 #include "item.h"
@@ -15,44 +17,44 @@ int Inventario::funcaoHash(std::string chave) {
     return hash % tamanhoTabela;
 }
 
-void Inventario::inserirItem(const Item& item) {
-    int idx = funcaoHash(item.getNome());
-    tabela.at(idx).push_back(item);
+void Inventario::inserirItem(std::unique_ptr<Item> item) {
+    int idx = funcaoHash(item->getNome());
+    tabela.at(idx).push_back(std::move(item));
     quantidadeItens++;
 }
 
-bool Inventario::removerItem(const std::string& nome) {
+std::unique_ptr<Item> Inventario::removerItem(const std::string& nome) {
     int idx = funcaoHash(nome);
     auto& bucket = tabela.at(idx);
-    for (auto i = bucket.begin(); i != bucket.end(); ++i) {
-        if (i->getNome() == nome) {
-            bucket.erase(i);
+    for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+        if ((*it)->getNome() == nome) {
+            std::unique_ptr<Item> itemRemovido = std::move(*it);
+            bucket.erase(it);
             quantidadeItens--;
-            return true;
+            return itemRemovido;
         }
     }
-    return false;
+    return nullptr;
 }
 
 Item* Inventario::buscarItem(const std::string& nome) {
     int idx = funcaoHash(nome);
-    for (Item& item : tabela.at(idx)) if (item.getNome() == nome) return &item;
+    for (auto& item : tabela.at(idx)) if (item->getNome() == nome) return item.get();
     return nullptr;
 }
 
 void Inventario::listarItens() const {
-    for (size_t i = 0; i < tabela.size(); i++) {
-        const auto& itens = tabela.at(i);
-        for (const Item& item : itens) item.exibirItem();
+    for (const auto& bucket : tabela) {
+        for (const auto& item : bucket) item->exibirItem();
     }
 }
 
 void Inventario::listarItensBatalha() const {
     std::cout << "---------------------------------------------" << std::endl;
     int idx = 1;
-    for (auto& bucket : tabela) {
-        for (auto& item : bucket) {
-            std::cout << idx++ << ". " << item.getNome() << " (Pow. " << item.getPoder() << ")" << std::endl;
+    for (const auto& bucket : tabela) {
+        for (const auto& item : bucket) {
+            std::cout << idx++ << ". " << item->getNome() << std::endl;
         }
     }
     std::cout << "---------------------------------------------" << std::endl;
@@ -60,4 +62,16 @@ void Inventario::listarItensBatalha() const {
 
 bool Inventario::inventarioVazio() const {
     return quantidadeItens == 0;
+}
+
+std::vector<std::unique_ptr<Item>> Inventario::extrairItens() {
+    std::vector<std::unique_ptr<Item>> itensExtraidos;
+    for (auto& bucket : tabela) {
+        for (auto& item : bucket) {
+            itensExtraidos.push_back(std::move(item));
+        }
+        bucket.clear();
+    }
+    quantidadeItens = 0;
+    return itensExtraidos;
 }

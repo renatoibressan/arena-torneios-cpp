@@ -3,7 +3,7 @@
 
 #include <string>
 
-enum class Tipo { Espada, Machado, Adaga, Martelo, Arco, Besta, Pistola, Rifle };
+enum class Tipo { Arma, Pocao };
 
 std::string tipoToString(Tipo tipo);
 
