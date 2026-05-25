@@ -9,7 +9,7 @@ class Arma : public Item {
     private:
         int dano;
     public:
-        Arma(std::string nome, int dano);
+        Arma(int id, std::string nome, int dano);
         void exibirItem() const override;
         void usar(Jogador& usuario, Jogador& oponente, int &vidaUsuario, int &vidaOponente) override;
         std::string serializar() const override;

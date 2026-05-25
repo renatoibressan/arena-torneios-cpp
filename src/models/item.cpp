@@ -4,7 +4,11 @@
 #include "item.h"
 #include "../enums/tipo.h"
 
-Item::Item(std::string nome, Tipo tipo) : nome(nome), tipo(tipo) {}
+Item::Item(int id, std::string nome, Tipo tipo) : id(id), nome(nome), tipo(tipo) {}
+
+int Item::getId() const {
+    return id;
+}
 
 std::string Item::getNome() const {
     return nome;

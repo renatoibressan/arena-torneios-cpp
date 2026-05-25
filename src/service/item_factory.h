@@ -8,7 +8,7 @@
 
 class ItemFactory {
     public:
-        static std::unique_ptr<Item> criarItem(const DadosItem& dados);
+        static std::unique_ptr<Item> criarItem(const DadosItem& dados, int& ultimoIdItens);
 };
 
 #endif

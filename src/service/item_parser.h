@@ -4,6 +4,7 @@
 #include <string>
 
 struct DadosItem {
+    std::string id;
     std::string tipo;
     std::string nome;
     std::string dano;

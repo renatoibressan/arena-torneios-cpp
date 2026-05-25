@@ -16,22 +16,23 @@ ArquivoItens::ArquivoItens(const std::string& caminho) : caminho(caminho) {}
 bool ArquivoItens::salvarItens(const std::vector<std::unique_ptr<Item>>& itens) const {
     std::ofstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
-    arquivo << "tipo,nome,dano,cura\n";
+    arquivo << "id,tipo,nome,dano,cura\n";
     for (const auto& item : itens) {
         arquivo << item->serializar() << "\n";
     }
     return true;
 }
 
-bool ArquivoItens::carregarItens(std::vector<std::unique_ptr<Item>>& itens) {
+bool ArquivoItens::carregarItens(std::vector<std::unique_ptr<Item>>& itens, int& ultimoIdItens) {
     std::ifstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
     std::string linha;
+    ultimoIdItens = 0;
     std::getline(arquivo, linha);
     while (std::getline(arquivo, linha)) {
         try {
             DadosItem dados = parseLinha(linha);
-            itens.push_back(ItemFactory::criarItem(dados));
+            itens.push_back(ItemFactory::criarItem(dados, ultimoIdItens));
         } catch (const std::invalid_argument& e) {
             std::cerr << "Erro ao ler linha " << linha << ": " << e.what() <<std::endl;
         }

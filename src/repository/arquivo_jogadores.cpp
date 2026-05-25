@@ -26,11 +26,11 @@ bool ArquivoJogadores::salvarJogadores(const std::vector<Jogador>& jogadores) co
     return true;
 }
 
-bool ArquivoJogadores::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) const {
+bool ArquivoJogadores::carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoIdJogadores) const {
     std::ifstream arquivo(caminho);
     if (!arquivo.is_open()) return false;
     std::string linha;
-    ultimoId = 0;
+    ultimoIdJogadores = 0;
     std::getline(arquivo, linha);
     while (std::getline(arquivo, linha)) {
         try {
@@ -52,7 +52,7 @@ bool ArquivoJogadores::carregarJogadores(std::vector<Jogador>& jogadores, int& u
             Jogador jogador = Jogador(id, nome, categoria, vida);
             jogador.setPontuacao(pontuacao);
             jogadores.push_back(std::move(jogador));
-            ultimoId = std::max(ultimoId, id);
+            ultimoIdJogadores = std::max(ultimoIdJogadores, id);
         } catch (const std::invalid_argument& e) {
             std::cerr << "Erro ao ler linha " << linha << ": " << e.what() <<std::endl;
         }

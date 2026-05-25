@@ -9,7 +9,7 @@ class Pocao : public Item {
     private:
         int cura;
     public:
-        Pocao(std::string nome, int cura);
+        Pocao(int id, std::string nome, int cura);
         void exibirItem() const override;
         void usar(Jogador& usuario, Jogador& oponente, int &vidaUsuario, int &vidaOponente) override;
         std::string serializar() const override;

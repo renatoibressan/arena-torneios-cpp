@@ -19,11 +19,13 @@ class Sistema {
         HistoricoAcoes historico;
         ArquivoJogadores arquivoJogadores;
         ArquivoItens arquivoItens;
-        int ultimoId;
+        int ultimoIdJogadores;
+        int ultimoIdItens;
         bool ordenadoPorId;
         bool ordenadoPorPontuacao;
         bool ordenadoPorNome;
-        int gerarNovoId();
+        int gerarNovoIdJogadores();
+        int gerarNovoIdItens();
         bool jogadorExiste(const std::string& nome);
         bool itemExiste(const std::string& nome);
     public:

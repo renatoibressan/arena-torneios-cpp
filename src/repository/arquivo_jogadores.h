@@ -12,7 +12,7 @@ class ArquivoJogadores {
     public:
         ArquivoJogadores(const std::string& caminho);
         bool salvarJogadores(const std::vector<Jogador>& jogadores) const;
-        bool carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoId) const;
+        bool carregarJogadores(std::vector<Jogador>& jogadores, int& ultimoIdJogadores) const;
         bool arquivoExiste() const;
 };
 

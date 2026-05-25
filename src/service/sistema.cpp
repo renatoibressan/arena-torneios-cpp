@@ -15,11 +15,17 @@
 #include "../enums/categoria.h"
 #include "../enums/tipo.h"
 
-Sistema::Sistema() : arquivoJogadores("src/data/jogadores.csv"), arquivoItens("src/data/itens.csv"), ultimoId(0), 
-                    ordenadoPorId(false), ordenadoPorPontuacao(false), ordenadoPorNome(false) {}
+Sistema::Sistema() : arquivoJogadores("src/data/jogadores.csv"), arquivoItens("src/data/itens.csv"), 
+                    ultimoIdJogadores(0), ultimoIdItens(0),
+                    ordenadoPorId(false), ordenadoPorPontuacao(false), 
+                    ordenadoPorNome(false) {}
 
-int Sistema::gerarNovoId() {
-    return ++ultimoId;
+int Sistema::gerarNovoIdJogadores() {
+    return ++ultimoIdJogadores;
+}
+
+int Sistema::gerarNovoIdItens() {
+    return ++ultimoIdItens;
 }
 
 bool Sistema::jogadorExiste(const std::string& nome) {
@@ -67,7 +73,6 @@ void Sistema::menuPrincipal() {
 }
 
 void Sistema::cadastrarJogador() {
-    int id = gerarNovoId();
     std::string nome = lerString("Insira o nome do jogador: ");
     capitalizarString(nome);
     if (!jogadores.empty() && jogadorExiste(nome)) {
@@ -83,9 +88,10 @@ void Sistema::cadastrarJogador() {
     }
     try {
         Categoria categoria = categoriaFromString(nomeCategoria);
+        int id = gerarNovoIdJogadores();
         Jogador jogador = Jogador(id, nome, categoria, vida);
         jogadores.push_back(std::move(jogador));
-        ultimoId = id;
+        ultimoIdJogadores = id;
         ordenadoPorId = false;
         ordenadoPorPontuacao = false;
         std::cout << "Jogador " << nome << " cadastrado com sucesso!" << std::endl;
@@ -143,13 +149,14 @@ void Sistema::registrarItem() {
     capitalizarString(tipoItem);
     try {
         Tipo tipo = tipoFromString(tipoItem);
+        int id = gerarNovoIdItens();
         if (tipo == Tipo::Arma) {
             int dano = lerInt("Insira o quantificador de dano do item: ");
             while (dano < 100 || dano > 1000 || dano % 10 != 0) {
                 std::cout << "Valor de dano invalido!" << std::endl;
                 dano = lerInt("Insira o quantificador de dano do item: ");
             }
-            std::unique_ptr<Arma> arma = std::make_unique<Arma>(nome, dano);
+            std::unique_ptr<Arma> arma = std::make_unique<Arma>(id, nome, dano);
             itensDisponiveis.push_back(std::move(arma));
         }
         if (tipo == Tipo::Pocao) {
@@ -158,7 +165,7 @@ void Sistema::registrarItem() {
                 std::cout << "Valor de cura invalida!" << std::endl;
                 cura = lerInt("Insira o quantificador de cura do item: ");
             }
-            std::unique_ptr<Pocao> pocao = std::make_unique<Pocao>(nome, cura);
+            std::unique_ptr<Pocao> pocao = std::make_unique<Pocao>(id, nome, cura);
             itensDisponiveis.push_back(std::move(pocao));
         }
         ordenadoPorNome = false;
@@ -458,8 +465,8 @@ void Sistema::carregarDados() {
         std::cout << "Arquivo de itens nao encontrado/sem registros!" << std::endl;
         return;
     }
-    bool sucessoJogadores = arquivoJogadores.carregarJogadores(jogadores, ultimoId);
-    bool sucessoItens = arquivoItens.carregarItens(itensDisponiveis);
+    bool sucessoJogadores = arquivoJogadores.carregarJogadores(jogadores, ultimoIdJogadores);
+    bool sucessoItens = arquivoItens.carregarItens(itensDisponiveis, ultimoIdItens);
     (sucessoJogadores) ? std::cout << jogadores.size() << " jogadores carregados do arquivo com sucesso!" << std::endl 
                         : std::cout << "Falha ao ler do arquivo de jogadores!" << std::endl;
     (sucessoItens) ? std::cout << itensDisponiveis.size() << " itens carregados do arquivo com sucesso!" << std::endl 

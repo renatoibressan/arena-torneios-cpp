@@ -6,7 +6,7 @@
 #include "jogador.h"
 #include "../enums/tipo.h"
 
-Pocao::Pocao(std::string nome, int cura) : Item(nome, Tipo::Pocao), cura(cura) {}
+Pocao::Pocao(int id, std::string nome, int cura) : Item(id, nome, Tipo::Pocao), cura(cura) {}
 
 void Pocao::exibirItem() const {
     std::cout << "------------------------------" << std::endl;
@@ -25,7 +25,7 @@ void Pocao::usar(Jogador& usuario, Jogador& oponente, int &vidaUsuario, int &vid
 }
 
 std::string Pocao::serializar() const {
-    return "Pocao," + nome + ",," + std::to_string(cura);
+    return std::to_string(id) + ",Pocao," + nome + ",," + std::to_string(cura);
 }
 
 int Pocao::getCura() const {

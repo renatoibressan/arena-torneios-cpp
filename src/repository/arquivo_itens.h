@@ -13,7 +13,7 @@ class ArquivoItens {
     public:
         ArquivoItens(const std::string& caminho);
         bool salvarItens(const std::vector<std::unique_ptr<Item>>& itens) const;
-        bool carregarItens(std::vector<std::unique_ptr<Item>>& itens);
+        bool carregarItens(std::vector<std::unique_ptr<Item>>& itens, int& ultimoIdItens);
         bool arquivoExiste() const;
 };
 

@@ -6,7 +6,7 @@
 #include "jogador.h"
 #include "../enums/tipo.h"
 
-Arma::Arma(std::string nome, int dano) : Item(nome, Tipo::Arma), dano(dano) {}
+Arma::Arma(int id, std::string nome, int dano) : Item(id, nome, Tipo::Arma), dano(dano) {}
 
 void Arma::exibirItem() const {
     std::cout << "------------------------------" << std::endl;
@@ -25,7 +25,7 @@ void Arma::usar(Jogador& usuario, Jogador& oponente, int &vidaUsuario, int &vida
 }
 
 std::string Arma::serializar() const {
-    return "Arma," + nome + "," + std::to_string(dano) + ",";
+    return std::to_string(id) + ",Arma," + nome + "," + std::to_string(dano) + ",";
 }
 
 int Arma::getDano() const {
